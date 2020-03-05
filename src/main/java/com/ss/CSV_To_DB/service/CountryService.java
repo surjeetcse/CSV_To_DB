@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +24,8 @@ public class CountryService implements ICountryService {
     private StateRepository stateRepository;
     @Autowired
     private CityRepository cityRepository;
+
+    public List<String> response=new ArrayList<>();
 
     @Override
     public List<Country> findAll() {
@@ -41,8 +44,9 @@ public class CountryService implements ICountryService {
                     if ((csvData.getCountry_name() != null && !csvData.getCountry_name().isEmpty()) &&
                             (csvData.getState_Name()!=null && !csvData.getState_Name().isEmpty()) &&
                             (csvData.getCity_Name() != null)&&!csvData.getCity_Name().isEmpty()) {
-                        Country country = countryRepository.findByCountry(csvData.getCountry_name().trim());
-                        if (country == null) {
+                        Country country = countryRepository.findByCountry(csvData.getCountry_name().toLowerCase());
+                        if (country == null)
+                        {
                             country = saveCountry(csvData.getCountry_name().trim());
                         }
                         State state = stateRepository.findByStateAndCountryId(csvData.getState_Name().trim(), country.getId());
@@ -51,15 +55,16 @@ public class CountryService implements ICountryService {
                         }
                         City city = cityRepository.findByCityAndStateId(csvData.getCity_Name(), state.getId());
                         if (city == null) {
-                            city = saveCity(state, csvData.getCity_Name().trim(), csvData.getCity_Code()!= null ? csvData.getCity_Code().trim() : "");
+                            city = saveCity(state, csvData);
                         }
-                    }
+                    }else response.add(csvData.getCountry_name()+"-> Not Present");
                 }catch (Exception ex){
+                    response.add(csvData.getCountry_name()+"-> Error");
                     logger.debug(ex.getMessage()+csvData.getCountry_name());
                 }
             });
         }
-        return "success;";
+        return response.toString();
     }
 
     private Country saveCountry(String countryName) {
@@ -75,10 +80,12 @@ public class CountryService implements ICountryService {
         stateRepository.save(state);
         return state;
     }
-    private City saveCity(State state,String cityName,String cityCode) {
+    private City saveCity(State state,CSVData cityData) {
         City city=new City();
-        city.setCity(cityName);
-        city.setCode(cityCode);
+        city.setCity(cityData.getCity_Name());
+        city.setCode(cityData.getCity_Code()!=null?cityData.getCity_Code():"");
+        city.setLat(cityData.getLat()!=null?cityData.getLat(): 0.00000000d);
+        city.setLng(cityData.getLng()!=null?cityData.getLng(): 0.00000000d);
         city.setStateId(state.getId());
         cityRepository.save(city);
         return city;

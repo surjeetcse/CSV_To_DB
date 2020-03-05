@@ -19,6 +19,9 @@ public class City {
     @NonNull
     private Long stateId;
     private String Code;
+    private double lat;
+    private double lng;
+
     public City() {
     }
 }

@@ -21,7 +21,7 @@ public class ReadCsvToResponse {
         List<CSVData> csvDataList=new ArrayList<>();
         try
         {
-            File file = new File("/home/axisrooms/Documents/Lists_of_cities_by_country.xlsx");   //creating a new file instance
+            File file = new File("/home/axisrooms/Downloads/mx.xlsx");   //creating a new file instance
             FileInputStream fis = new FileInputStream(file);   //obtaining bytes from the file
             XSSFWorkbook wb = new XSSFWorkbook(fis);         //creating Workbook instance that refers to .xlsx file
             XSSFSheet sheet = wb.getSheetAt(0);     //creating a Sheet object to retrieve object
