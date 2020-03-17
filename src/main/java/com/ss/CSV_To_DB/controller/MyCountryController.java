@@ -2,7 +2,7 @@ package com.ss.CSV_To_DB.controller;
 
 import com.ss.CSV_To_DB.model.CSVData;
 import com.ss.CSV_To_DB.model.Country;
-import com.ss.CSV_To_DB.service.CountryService;
+import com.ss.CSV_To_DB.service.GeoService;
 import com.ss.CSV_To_DB.service.ICountryService;
 import com.ss.CSV_To_DB.util.ReadCsvToResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +19,21 @@ import java.util.List;
 @RequestMapping(value = "/api")
 public class MyCountryController {
 
+    //localhost:4000/api/save
+
     @Autowired
     ICountryService iCountryService;
-
+    @Autowired
+    GeoService geoService;
     @RequestMapping(method = RequestMethod.POST,value = "/save", produces = "text/csv")
-    public String saveRecord(HttpServletResponse response) throws IOException {
+    public String saveRecordPostgres(HttpServletResponse response) throws IOException {
         List<CSVData> csvDataList=ReadCsvToResponse.readFile();
         return iCountryService.saveRecord(csvDataList);
     }
 
-    @RequestMapping(value = "/countries")
-    public void findCountries(HttpServletResponse response) throws IOException {
-        List<Country> countries = (List<Country>) iCountryService.findAll();
-    }
-
-    @RequestMapping(value = "/country/{countryId}")
-    public void findCountry(@PathVariable Long countryId, HttpServletResponse response) throws IOException {
-        Country country = iCountryService.findById(countryId);
+    @RequestMapping(method = RequestMethod.POST,value = "/saveMongo", produces = "text/csv")
+    public String saveRecordMongo(HttpServletResponse response) throws IOException {
+        List<CSVData> csvDataList=ReadCsvToResponse.readFile();
+        return geoService.saveRecord(csvDataList).toString();
     }
 }
