@@ -1,4 +1,4 @@
-package com.ss.CSV_To_DB.model;
+package com.axisrooms.codex.model.staticlookup;
 
 import lombok.Getter;
 import lombok.Setter;

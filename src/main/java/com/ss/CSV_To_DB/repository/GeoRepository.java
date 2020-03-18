@@ -1,6 +1,6 @@
 package com.ss.CSV_To_DB.repository;
 
-import com.ss.CSV_To_DB.model.Geo;
+import com.axisrooms.codex.model.staticlookup.Geo;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

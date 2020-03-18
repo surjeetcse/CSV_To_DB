@@ -1,5 +1,6 @@
 package com.ss.CSV_To_DB.service;
 
+import com.axisrooms.codex.model.staticlookup.Geo;
 import com.ss.CSV_To_DB.model.*;
 import com.ss.CSV_To_DB.repository.GeoRepository;
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class GeoService{
         geo.setCountry(countryName);
         geo.setState(stateName);
         geo.setCity(cityName);
-        //goeRepository.save(geo);
+        goeRepository.save(geo);
         return geo;
     }
     private Geo getGeo(CSVData csvData,List<Geo> geoList) {
